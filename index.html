@@ -60,16 +60,16 @@
 
     <label for="customer-phone">Phone number</label>
     <input
-      id="customer-phone"
-      name="phone"
-      type="tel"
-      autocomplete="tel"
-      inputmode="tel"
-      pattern="[0-9+() 0-9]{10,20}"
-      maxlength="20"
-      title="Enter a valid phone number."
-      required
-    />
+  id="customer-phone"
+  name="phone"
+  type="tel"
+  autocomplete="tel"
+  inputmode="tel"
+  pattern="[0-9()+ ]{10,20}"
+  maxlength="20"
+  title="Enter 10–20 characters using digits, spaces, +, ( or )."
+  required
+/>
 
     <label for="customer-address">House number and street</label>
     <textarea

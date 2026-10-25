@@ -76,3 +76,108 @@ button {
     height: 180px;
   }
 }
+
+
+#cart {
+  max-width: 900px;
+  margin: 24px auto;
+  padding: 24px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+#cart[hidden] {
+  display: none;
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 12px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.cart-item p {
+  flex: 1 1 220px;
+  margin: 0;
+}
+
+.cart-item button {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+#cart-summary {
+  margin-top: 20px;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+
+/* Fix NovaCart product layout and image overflow */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+#products {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: 20px;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  align-items: start;
+}
+
+#products .product-card {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+#products .product-card img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: 220px;
+  object-fit: contain;
+  object-position: center;
+  margin: 0 auto 16px;
+}
+
+/* Make the layout fit smaller screens */
+
+@media (max-width: 600px) {
+  #products {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+
+  #products .product-card img {
+    height: 200px;
+  }
+
+  #cart {
+    width: 100%;
+    max-width: 100%;
+    margin: 20px auto;
+    padding: 16px;
+  }
+
+  .cart-item {
+    align-items: flex-start;
+  }
+}

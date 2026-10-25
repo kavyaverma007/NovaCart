@@ -1,39 +1,87 @@
 
-const productContainer = document.getElementById("products");
+const productsContainer = document.getElementById("products");
 const searchInput = document.getElementById("search");
+const cartToggle = document.getElementById("cart-toggle");
+const cartSection = document.getElementById("cart");
 
-function displayProducts(items) {
-  if (items.length === 0) {
-    productContainer.innerHTML = "<p>No products found.</p>";
+function formatPrice(price) {
+  return `₹${price.toLocaleString("en-IN")}`;
+}
+
+function renderProducts(searchTerm = "") {
+  if (!productsContainer) return;
+
+  const term = searchTerm.trim().toLowerCase();
+
+  const filteredProducts = products.filter(product =>
+    `${product.name} ${product.category} ${product.description}`
+      .toLowerCase()
+      .includes(term)
+  );
+
+  productsContainer.replaceChildren();
+
+  if (filteredProducts.length === 0) {
+    const message = document.createElement("p");
+    message.textContent = "No products found. Try another search.";
+    productsContainer.appendChild(message);
     return;
   }
 
-  productContainer.innerHTML = items.map(product => `
-    <article class="product-card">
-      <img
-        src="${product.image}"
-        alt="${product.name}"
-        class="product-image"
-      >
-      <h3>${product.name}</h3>
-      <p>${product.description}</p>
-      <p class="price">
-        ₹${product.price.toLocaleString("en-IN")}
-      </p>
-      <button type="button">Add to Cart</button>
-    </article>
-  `).join("");
+  filteredProducts.forEach(product => {
+    const card = document.createElement("article");
+    card.className = "product-card";
+
+    const image = document.createElement("img");
+    image.src = product.image;
+    image.alt = product.name;
+    image.loading = "lazy";
+
+    const name = document.createElement("h3");
+    name.textContent = product.name;
+
+    const description = document.createElement("p");
+    description.textContent = product.description;
+
+    const price = document.createElement("p");
+    price.className = "product-price";
+    price.textContent = formatPrice(product.price);
+
+    const addButton = document.createElement("button");
+    addButton.type = "button";
+    addButton.textContent = "Add to Cart";
+
+    addButton.addEventListener("click", () => {
+      addToCart(product.name);
+      addButton.textContent = "Added!";
+      setTimeout(() => {
+        addButton.textContent = "Add to Cart";
+      }, 700);
+    });
+
+    card.append(image, name, description, price, addButton);
+    productsContainer.appendChild(card);
+  });
 }
 
-displayProducts(products);
+if (searchInput) {
+  searchInput.addEventListener("input", () => {
+    renderProducts(searchInput.value);
+  });
+}
 
-searchInput.addEventListener("input", () => {
-  const query = searchInput.value.toLowerCase().trim();
+if (cartToggle && cartSection) {
+  cartToggle.addEventListener("click", () => {
+    cartSection.hidden = !cartSection.hidden;
 
-  const filteredProducts = products.filter(product =>
-    product.name.toLowerCase().includes(query) ||
-    product.category.toLowerCase().includes(query)
-  );
+    if (!cartSection.hidden) {
+      cartSection.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    }
+  });
+}
 
-  displayProducts(filteredProducts);
-});
+renderProducts();
+renderCart();

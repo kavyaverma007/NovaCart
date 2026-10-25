@@ -183,9 +183,12 @@ body {
 }
 
 
-/* NovaCart checkout */
+
+/* NovaCart checkout layout */
 
 #checkout {
+  display: block;
+  box-sizing: border-box;
   width: min(100% - 32px, 760px);
   margin: 24px auto;
   padding: 24px;
@@ -211,27 +214,31 @@ body {
 }
 
 .checkout-total {
-  font-weight: 700;
   font-size: 1.15rem;
+  font-weight: 700;
 }
 
 #checkout-form {
-  display: grid;
-  gap: 10px;
+  display: block;
+  width: 100%;
 }
 
 #checkout-form label {
-  margin-top: 8px;
+  display: block;
+  margin: 14px 0 6px;
   font-weight: 600;
 }
 
 #checkout-form input,
 #checkout-form textarea {
+  display: block;
+  box-sizing: border-box;
   width: 100%;
-  min-width: 0;
   padding: 12px;
   border: 1px solid #ccc;
   border-radius: 6px;
+  background: #fff;
+  color: #222;
   font: inherit;
 }
 
@@ -242,12 +249,13 @@ body {
 
 #checkout-form button,
 #checkout-start {
+  display: inline-block;
   padding: 12px 16px;
-  margin-top: 10px;
+  margin: 12px 8px 0 0;
   border: 0;
   border-radius: 6px;
   background: #222;
-  color: white;
+  color: #fff;
   font: inherit;
   cursor: pointer;
 }

@@ -5,7 +5,7 @@ const cartToggle = document.getElementById("cart-toggle");
 const cartSection = document.getElementById("cart");
 
 function formatPrice(price) {
-  return `₹${price.toLocaleString("en-IN")}`;
+  return `₹${Number(price).toLocaleString("en-IN")}`;
 }
 
 function renderProducts(searchTerm = "") {
@@ -41,7 +41,7 @@ function renderProducts(searchTerm = "") {
     name.textContent = product.name;
 
     const description = document.createElement("p");
-    description.textContent = product.description;
+    description.textContent = product.description || "";
 
     const price = document.createElement("p");
     price.className = "product-price";
@@ -54,6 +54,7 @@ function renderProducts(searchTerm = "") {
     addButton.addEventListener("click", () => {
       addToCart(product.name);
       addButton.textContent = "Added!";
+
       setTimeout(() => {
         addButton.textContent = "Add to Cart";
       }, 700);
@@ -62,6 +63,46 @@ function renderProducts(searchTerm = "") {
     card.append(image, name, description, price, addButton);
     productsContainer.appendChild(card);
   });
+}
+
+async function loadProducts() {
+  if (productsContainer) {
+    productsContainer.textContent = "Loading products...";
+  }
+
+  const { data, error } = await supabaseClient
+    .from("products")
+    .select("id, name, description, price, image_url")
+    .order("id");
+
+  if (error) {
+    console.error("Could not load products:", error.message);
+
+    if (productsContainer) {
+      productsContainer.textContent =
+        "Unable to load products. Please refresh and try again.";
+    }
+    return;
+  }
+
+  // Update the existing array so cart.js can still use it.
+  products.splice(
+    0,
+    products.length,
+    ...data.map(product => ({
+      id: product.id,
+      name: product.name,
+      category: "",
+      price: Number(product.price),
+      image: product.image_url || "",
+      description: product.description || ""
+    }))
+  );
+
+  renderProducts(searchInput ? searchInput.value : "");
+  renderCart();
+
+  console.log("Products loaded from Supabase:", products);
 }
 
 if (searchInput) {
@@ -83,5 +124,5 @@ if (cartToggle && cartSection) {
   });
 }
 
-renderProducts();
 renderCart();
+loadProducts();
